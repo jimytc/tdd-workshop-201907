@@ -22,10 +22,20 @@ class BudgetServiceTest < Minitest::Test
     budget_in_range_should_be(start_date, end_date, 0)
   end
 
+  def test_entire_month_without_budgets
+    given_budgets([])
+    start_date, end_date = query_range_of('2019-03-01', '2019-03-31')
+    budget_in_range_should_be(start_date, end_date, 0)
+  end
+
   private
 
   def query_range_of(start_date_str, end_date_str)
     [Date.strptime(start_date_str, '%Y-%m-%d'), Date.strptime(end_date_str, '%Y-%m-%d')]
+  end
+
+  def given_budgets(budgets)
+    mock(@repo).budgets { budgets }
   end
 
   def budget_in_range_should_be(start_date, end_date, expected)

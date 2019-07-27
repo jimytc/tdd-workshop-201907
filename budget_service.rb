@@ -9,5 +9,9 @@ class BudgetService
 
   def query(start_date, end_date)
     return 0 if end_date < start_date
+
+    @budget_repo.budgets_between(start_date, end_date).reduce(0) do |memo, budget|
+      memo += budget.amount
+    end
   end
 end
