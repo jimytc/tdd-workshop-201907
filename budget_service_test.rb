@@ -28,6 +28,26 @@ class BudgetServiceTest < Minitest::Test
     budget_in_range_should_be(start_date, end_date, 0)
   end
 
+  def test_entire_month_with_budget_amount_zero
+    given_budgets([Budget.new('201903', 0)])
+    start_date, end_date = query_range_of('2019-03-01', '2019-03-31')
+    budget_in_range_should_be(start_date, end_date, 0)
+  end
+
+  def test_entire_month_with_valid_budgets
+    given_budgets([Budget.new('201903', 3100), Budget.new('201904', 30_000)])
+    start_date, end_date = query_range_of('2019-03-01', '2019-03-31')
+    budget_in_range_should_be(start_date, end_date, 3100)
+  end
+
+  def test_three_entire_months
+    given_budgets([Budget.new('201903', 3100),
+                   Budget.new('201904', 30_000),
+                   Budget.new('201905', 310)])
+    start_date, end_date = query_range_of('2019-03-01', '2019-05-31')
+    budget_in_range_should_be(start_date, end_date, 33_410)
+  end
+
   private
 
   def query_range_of(start_date_str, end_date_str)
