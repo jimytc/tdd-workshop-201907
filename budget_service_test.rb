@@ -48,6 +48,14 @@ class BudgetServiceTest < Minitest::Test
     budget_in_range_should_be(start_date, end_date, 33_410)
   end
 
+  def test_partial_start_month
+    given_budgets([Budget.new('201903', 3100),
+                   Budget.new('201904', 30_000),
+                   Budget.new('201905', 310)])
+    start_date, end_date = query_range_of('2019-03-16', '2019-05-31')
+    budget_in_range_should_be(start_date, end_date, 31_910)
+  end
+
   private
 
   def query_range_of(start_date_str, end_date_str)
