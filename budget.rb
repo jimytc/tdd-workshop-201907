@@ -18,7 +18,11 @@ class Budget
   def amount_between(start_date, end_date)
     return 0 unless in?(start_date, end_date)
 
-    overlap_days(start_date, end_date) * amount / month_days
+    daily_amount * overlap_days(start_date, end_date)
+  end
+
+  def daily_amount
+    1.0 * amount / month_days
   end
 
   def overlap_days(start_date, end_date)
