@@ -18,14 +18,14 @@ class Budget
   def amount_between(start_date, end_date)
     return 0 unless in?(start_date, end_date)
 
-    daily_amount * overlap_days(start_date, end_date)
+    daily_amount * effective_days(start_date, end_date)
   end
 
   def daily_amount
     1.0 * amount / month_days
   end
 
-  def overlap_days(start_date, end_date)
+  def effective_days(start_date, end_date)
     month_start = Date.strptime(year_month, '%Y%m')
     current_start_date = [month_start, start_date].max
     month_end = Date.strptime(year_month, '%Y%m').next_month - 1
