@@ -11,7 +11,7 @@ class BudgetService
     return 0 if end_date < start_date
 
     @budget_repo.budgets
-                .map { |budget| budget.amount_between(start_date, end_date) }
-                .sum
+                &.map { |budget| budget.amount_between(start_date, end_date) }
+                &.sum || 0
   end
 end
