@@ -11,31 +11,29 @@ class Budget
     @amount = amount
   end
 
-  def in?(start_date, end_date)
-    year_month.between?(start_date.strftime('%Y%m'), end_date.strftime('%Y%m'))
+  def overlapping_amount(period)
+    daily_amount * month_period.overlapping_day_count(period)
   end
 
-  def amount_between(start_date, end_date)
-    return 0 unless in?(start_date, end_date)
-
-    daily_amount * effective_days(start_date, end_date)
-  end
+  private
 
   def daily_amount
-    1.0 * amount / month_days
+    1.0 * amount / day_count
   end
 
-  def effective_days(start_date, end_date)
-    month_start = Date.strptime(year_month, '%Y%m')
-    current_start_date = [month_start, start_date].max
-    month_end = Date.strptime(year_month, '%Y%m').next_month - 1
-    current_end_date = [month_end, end_date].min
-    (current_end_date - current_start_date).to_i + 1
+  def month_period
+    Period.new(first_day, last_day)
   end
 
-  def month_days
-    month_start = Date.strptime(year_month, '%Y%m')
-    month_end = Date.strptime(year_month, '%Y%m').next_month - 1
-    (month_end - month_start).to_i + 1
+  def first_day
+    Date.strptime(year_month, '%Y%m')
+  end
+
+  def last_day
+    first_day.next_month - 1
+  end
+
+  def day_count
+    month_period.day_count
   end
 end

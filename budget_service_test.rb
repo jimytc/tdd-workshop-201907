@@ -64,6 +64,12 @@ class BudgetServiceTest < Minitest::Test
     budget_in_range_should_be(start_date, end_date, 30_110)
   end
 
+  def test_no_overlap
+    given_budgets([Budget.new('201903', 3100)])
+    start_date, end_date = query_range_of('2019-01-31', '2019-02-01')
+    budget_in_range_should_be(start_date, end_date, 0)
+  end
+
   def test_no_budgets
     given_budgets(nil)
     start_date, end_date = query_range_of('2019-03-31', '2019-03-31')
